@@ -1,7 +1,7 @@
-from urllib import response
 from flask import Flask, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_expects_json import expects_json
 
 from utility import import_tensorflow
 
@@ -34,7 +34,18 @@ def is_hate_speech(prediction):
     return prediction[0] >= 0
 
 
+single_prediction_schema = {
+    "type": "object",
+    "properties":  {
+        "text": {"type": "string"}
+    },
+    "required": ["text"],
+    "additionalProperties": False
+}
+
+
 @app.route("/single-hate-prediction", methods=['POST'])
+@expects_json(single_prediction_schema)
 @limiter.limit("5 per minute")
 def single_hate_prediction():
     data = request.get_json()
@@ -48,7 +59,23 @@ def single_hate_prediction():
     return jsonify(is_hate_speech=f"{verdict}")
 
 
+many_prediction_schema = {
+    "type": "object",
+    "properties":  {
+        "texts": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": ["texts"],
+    "additionalProperties": False
+}
+
+
 @app.route('/many-hate-prediction', methods=['POST'])
+@expects_json(many_prediction_schema)
 @limiter.limit("5 per minute")
 def many_hate_prediction():
     data = request.get_json()
