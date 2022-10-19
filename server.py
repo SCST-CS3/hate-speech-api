@@ -1,3 +1,4 @@
+from urllib import response
 from flask import Flask, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -17,7 +18,7 @@ tf = import_tensorflow()
 rnn_model = tf.keras.models.load_model('saved_model/rnn/v1', compile=False)
 
 
-def is_hate_speech(predictions):
+def is_hate_speech_many(predictions):
     verdicts = []
 
     for i in predictions:
@@ -29,7 +30,7 @@ def is_hate_speech(predictions):
     return verdicts
 
 
-def is_hate_speech_single(prediction):
+def is_hate_speech(prediction):
     return prediction[0] >= 0
 
 
@@ -42,26 +43,22 @@ def single_hate_prediction():
     if(not text):
         return jsonify(is_hate_speech=f"{False}")
 
-    verdict = is_hate_speech_single(rnn_model.predict([text])[0])
+    verdict = is_hate_speech_many(rnn_model.predict([text])[0])
 
-    response = {
-        "is_hate_speech": f"{verdict}"
-    }
-
-    return jsonify(response)
+    return jsonify(is_hate_speech=f"{verdict}")
 
 
-@app.route('/many-hate-prediction')
+@app.route('/many-hate-prediction', methods=['POST'])
 @limiter.limit("5 per minute")
 def many_hate_prediction():
     data = request.get_json()
-    text = data['text']
 
-    verdict = is_hate_speech_single(rnn_model.predict([text])[0])
+    verdicts = is_hate_speech_many(rnn_model.predict(data['texts']))
 
-    response = {
-        "is_hate_speech": f"{verdict}"
-    }
+    response = []
+    for i, value in enumerate(verdicts):
+        response.append(
+            {f"{i}": {"is_hate_speech": f"{value}", f"original": f"{data['text'][i]}"}})
 
     return jsonify(response)
 
