@@ -46,7 +46,7 @@ single_prediction_schema = {
 
 @app.route("/single-hate-prediction", methods=['POST'])
 @expects_json(single_prediction_schema)
-@limiter.limit("5 per minute")
+@limiter.limit("100 per minute")
 def single_hate_prediction():
     data = request.get_json()
     text = data['text']
@@ -56,7 +56,7 @@ def single_hate_prediction():
 
     verdict = is_hate_speech_many(rnn_model.predict([text])[0])
 
-    return jsonify(is_hate_speech=f"{verdict}")
+    return jsonify(is_hate_speech=verdict[0])
 
 
 many_prediction_schema = {
@@ -76,7 +76,7 @@ many_prediction_schema = {
 
 @app.route('/many-hate-prediction', methods=['POST'])
 @expects_json(many_prediction_schema)
-@limiter.limit("5 per minute")
+@limiter.limit("100 per minute")
 def many_hate_prediction():
     data = request.get_json()
 
@@ -85,7 +85,7 @@ def many_hate_prediction():
     response = []
     for i, value in enumerate(verdicts):
         response.append(
-            {f"{i}": {"is_hate_speech": f"{value}", f"original": f"{data['text'][i]}"}})
+            {f"{i}": {"is_hate": f"{value}", f"original": f"{data['texts'][i]}"}})
 
     return jsonify(response)
 
