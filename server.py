@@ -9,7 +9,6 @@ from utility import import_tensorflow
 from dotenv import load_dotenv
 load_dotenv()
 
-
 app = Flask(__name__)
 limiter = Limiter(
     app,
@@ -96,4 +95,4 @@ def many_hate_prediction():
 
 
 if __name__ == "__main__":
-    serve(app, port=os.getenv("PORT", 5000))
+    serve(app)
