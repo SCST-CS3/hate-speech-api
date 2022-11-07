@@ -3,7 +3,11 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_expects_json import expects_json
 
+import os
 from utility import import_tensorflow
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -51,6 +55,9 @@ def single_hate_prediction():
     data = request.get_json()
     text = data['text']
 
+    print(os.getenv("PORT"))
+    print(PORT)
+
     if(not text):
         return jsonify(is_hate_speech=f"{False}")
 
@@ -91,4 +98,4 @@ def many_hate_prediction():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=os.getenv("PORT", 5000))
