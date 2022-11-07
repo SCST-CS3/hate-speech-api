@@ -6,6 +6,7 @@ from flask_expects_json import expects_json
 import os
 from utility import import_tensorflow
 from dotenv import load_dotenv
+load_dotenv()
 
 
 app = Flask(__name__)
@@ -97,5 +98,4 @@ def many_hate_prediction():
 
 
 if __name__ == "__main__":
-    load_dotenv()
-    app.run(port=os.getenv("PORT", 5000))
+    app.run(port=os.getenv("FLASK_RUN_PORT", 5000))
