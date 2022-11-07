@@ -1,1 +1,1 @@
-web: gunicorn --workers=4 server:app --timeout 500 
+web: gunicorn --workers=4 --worker-class gevent server:app --timeout 500 
