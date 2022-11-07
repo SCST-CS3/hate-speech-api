@@ -3,3 +3,5 @@ flask_expects_json==1.7.0
 Flask_Limiter==2.6.3
 python-dotenv==0.21.0
 tensorflow==2.9.1
+gunicorn==20.1.0
+gevent==22.10.2
