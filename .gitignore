@@ -2,6 +2,7 @@
 # Created by https://www.gitignore.io/api/flask
 # Edit at https://www.gitignore.io/?templates=flask
 
+.env
 .idea
 .vscode
 venv/
@@ -120,5 +121,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-.env
 # End of https://www.gitignore.io/api/flask
