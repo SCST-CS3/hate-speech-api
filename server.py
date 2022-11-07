@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_limiter import Limiter
+from waitress import serve
 from flask_limiter.util import get_remote_address
 from flask_expects_json import expects_json
 
@@ -55,9 +56,6 @@ def single_hate_prediction():
     data = request.get_json()
     text = data['text']
 
-    print(os.getenv("PORT"))
-    print(PORT)
-
     if(not text):
         return jsonify(is_hate_speech=f"{False}")
 
@@ -98,4 +96,4 @@ def many_hate_prediction():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.getenv("PORT", 5000)))
+    serve(app, port=os.getenv("PORT", 5000))
