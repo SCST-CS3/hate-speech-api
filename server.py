@@ -7,6 +7,7 @@ from flask_expects_json import expects_json
 import os
 from utility import import_tensorflow
 from dotenv import load_dotenv
+load_dotenv()
 
 
 app = Flask(__name__)
