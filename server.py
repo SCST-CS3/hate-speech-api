@@ -95,4 +95,4 @@ def many_hate_prediction():
 
 
 if __name__ == "__main__":
-    serve(app, port=int(os.getenv("PORT", default=5000)))
+    serve(app, port=int(os.getenv("PORT", default=4000)))
