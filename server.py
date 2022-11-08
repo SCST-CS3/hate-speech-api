@@ -94,7 +94,5 @@ def many_hate_prediction():
     return jsonify(response)
 
 
-create_app = serve(app, port=int(os.getenv("PORT", default=5000)))
-
 if __name__ == "__main__":
     serve(app, port=int(os.getenv("PORT", default=5000)))

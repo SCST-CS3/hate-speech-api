@@ -1,1 +1,1 @@
-web: waitress-serve server:create_app
+web: python server.py
