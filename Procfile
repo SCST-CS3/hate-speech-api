@@ -1,1 +1,1 @@
-web: waitress-serve server:app
+web: waitress-serve server:create_app
