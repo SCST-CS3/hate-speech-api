@@ -88,7 +88,7 @@ def many_hate_prediction():
     response = []
     for i, value in enumerate(verdicts):
         response.append(
-            {f"{i}": {"is_hate": f"{value}", f"original": f"{data['texts'][i]}"}})
+            {f"{i}": {"is_hate_speech": value, f"original": f"{data['texts'][i]}"}})
 
     return jsonify(response)
 
