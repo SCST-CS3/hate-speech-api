@@ -4,15 +4,19 @@ from flask_limiter.util import get_remote_address
 from flask_expects_json import expects_json
 
 import os
+import json
 from utility import import_tensorflow
 from dotenv import load_dotenv
 load_dotenv()
+
+HTTP_METHODS = ['GET', 'HEAD', 'POST', 'PUT',
+                'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH']
 
 app = Flask(__name__)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    default_limits=["100 per minute"],
+    default_limits=["10 per hour"],
     storage_uri="memory://",
 )
 
@@ -35,6 +39,12 @@ def is_hate_speech_many(predictions):
 
 def is_hate_speech(prediction):
     return prediction[0] >= 0
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>', methods=HTTP_METHODS)
+def catch_all(path):
+    return json.dumps({"message": "NOT FOUND"}), 404
 
 
 single_prediction_schema = {
