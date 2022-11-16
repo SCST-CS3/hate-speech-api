@@ -41,10 +41,14 @@ def is_hate_speech(prediction):
     return prediction[0] >= 0
 
 
+def is_text_less_than_hundred_words(text):
+    return len(text.split()) <= 100
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>', methods=HTTP_METHODS)
 def catch_all(path):
-    return json.dumps({"message": "NOT FOUND"}), 404
+    return jsonify({"message": "NOT FOUND"}), 404
 
 
 single_prediction_schema = {
@@ -63,6 +67,9 @@ single_prediction_schema = {
 def single_hate_prediction():
     data = request.get_json()
     text = data['text']
+
+    if not is_text_less_than_hundred_words(text):
+        return jsonify({"message": "The text property contains more than 100 words."}), 400
 
     if(not text):
         return jsonify(is_hate_speech=f"{False}")
@@ -92,6 +99,10 @@ many_prediction_schema = {
 @limiter.limit("100 per minute")
 def many_hate_prediction():
     data = request.get_json()
+
+    for i, value in enumerate(data):
+        if not is_text_less_than_hundred_words(data["texts"][i]):
+            return jsonify({"message": f"The text in index {i} property contains more than 100 words."}), 400
 
     verdicts = is_hate_speech_many(rnn_model.predict(data['texts']))
 
