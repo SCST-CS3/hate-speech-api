@@ -20,7 +20,7 @@ Sample Response
 
 ```json
 {
-  "is-hate": 0
+  "is_hate_speech": 0
 }
 ```
 
@@ -46,25 +46,25 @@ Sample Response
   [
   {
     "0": {
-      "is_hate": "0",
+      "is_hate_speech": "0",
       "original": "Lorem"
     }
   },
   {
     "1": {
-      "is_hate": "0",
+      "is_hate_speech": "0",
       "original": "Ipsum"
     }
   },
   {
     "2": {
-      "is_hate": "0",
+      "is_hate_speech": "0",
       "original": "Lorem"
     }
   },
   {
     "3": {
-      "is_hate": "0",
+      "is_hate_speech": "0",
       "original": "Ipsum"
     }
   }
